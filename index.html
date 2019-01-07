@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <title>App Fabric | add Border full canvas</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://fabricjs.com/lib/fabric.js"></script>
+    <style>
+      body{
+        padding: 0;
+        marign: 0;
+      }
+      #canvas{
+        padding: 2px;
+      }
+      #addBorder{
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="300"></canvas>
+    <button id="addBorder">Add Border</button>
+    <button id="deletBorder">Delete</button>
+    <script>
+      var canvas = new fabric.Canvas("canvas"),
+      canvasWidth = $("#canvas").width(),
+      canvasHeight = $("#canvas").height(),
+      My_Border = [],
+      my_image;
+
+      fabric.Image.fromURL("https://i.ibb.co/N2zL5FP/Front.png", function(img){
+        my_image = img;
+        img.set({
+          left: (canvasWidth/2),
+          top: (canvasHeight/2),
+          originX: 'center',
+          originY: 'center',
+        });
+        img.scale(0.3).setCoords();
+        canvas.add(img);
+      });
+      canvas.renderAll();
+      $("#addBorder").on("click", function(){
+              lineTop    = new fabric.Line([canvasWidth, 0, 0, 0],  {stroke: "#000", strokeWidth: 12, selectable: false });
+              lineLeft   = new fabric.Line([0, 0, 0, canvasHeight], {stroke: "#000", strokeWidth: 12, selectable: false });
+              lineBottom = new fabric.Line([canvasWidth, 0, 0, 0],  {top: canvasHeight-12, stroke: "#000", strokeWidth: 12, selectable: false });
+              lineRight  = new fabric.Line([0, 0, 0, canvasHeight], {left: canvasWidth-12, stroke: "#000", strokeWidth: 12, selectable: false });
+              canvas.add(lineTop);
+              canvas.add(lineLeft);
+              canvas.add(lineBottom);
+              canvas.add(lineRight);
+              canvas.renderAll();
+              My_Border = {
+                  "top": lineTop, 
+                  "left": lineLeft, 
+                  "bottom": lineBottom, 
+                  "right": lineRight
+              };
+      });
+      $("#deletBorder").on("click", function(){
+        if(My_Border){
+          canvas.remove(My_Border['top']);
+          canvas.remove(My_Border['left']);
+          canvas.remove(My_Border['bottom']);
+          canvas.remove(My_Border['right']);
+        }
+      });
+    </script>
+  </body>
+</html>
